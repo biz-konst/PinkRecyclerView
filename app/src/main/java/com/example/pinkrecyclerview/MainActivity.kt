@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkrecycleradapter.core.BasePinkViewHolderProvider
 import com.example.pinkrecycleradapter.custom.PinkGroupAdapter
+import com.example.pinkrecycleradapter.custom.PinkGroupNodeAdapter
 import com.example.pinkrecycleradapter.custom.PinkListAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -25,29 +26,16 @@ class MainActivity : AppCompatActivity() {
                 .add(ChildLitItem::class, R.layout.sub_item, ChildListItemViewHolder())
 
         val list = findViewById<RecyclerView>(R.id.list)
-        list.adapter = ConcatAdapter().apply {
-            addAdapter(
-                PinkGroupAdapter(
-                    viewHolderRepo, PinkListAdapter(viewHolderRepo, diffItemCallback)
-                        .apply { submitList(items[0].child) }, items[0], items[0].title
-                )
-            )
-            addAdapter(
-                PinkGroupAdapter(
-                    viewHolderRepo, PinkListAdapter(viewHolderRepo, diffItemCallback)
-                        .apply { submitList(items[1].child) }, items[1], items[1].title
-                )
-            )
-            addAdapter(
-                PinkGroupAdapter(
-                    viewHolderRepo, PinkListAdapter(viewHolderRepo, diffItemCallback)
-                        .apply {
-                            submitList(items[2].child)
-                            submitList(items[1].child)
-                        }, items[2], items[2].title
-                )
-            )
-        }
+        list.adapter = PinkGroupAdapter(viewHolderRepo)
+            .addNode(items[0], items[0].title,
+                PinkListAdapter(viewHolderRepo, diffItemCallback)
+                    .apply { submitList(items[0].child) })
+            .addNode(items[1], items[1].title,
+                PinkListAdapter(viewHolderRepo, diffItemCallback)
+                    .apply { submitList(items[1].child) })
+            .addNode(items[2], items[2].title,
+                PinkListAdapter(viewHolderRepo, diffItemCallback)
+                    .apply { submitList(items[1].child) })
     }
 
     companion object {

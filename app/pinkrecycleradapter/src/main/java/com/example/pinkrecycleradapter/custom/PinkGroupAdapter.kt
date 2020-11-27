@@ -1,62 +1,109 @@
 package com.example.pinkrecycleradapter.custom
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.view.ViewGroup
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkrecycleradapter.core.PinkBaseAdapter
+import com.example.pinkrecycleradapter.core.PinkViewHolder
 import com.example.pinkrecycleradapter.core.PinkViewHolderProvider
 
 @Suppress("unused")
-open class PinkGroupAdapter<T>(
-    provider: PinkViewHolderProvider,
-    private val itemAdapter: PinkBaseAdapter<*>,
-    data: T,
-    private val typeId: Any
-) : PinkBaseAdapter<Any>(provider), PinkGroupAdapterItem<T> {
+open class PinkGroupAdapter(viewHolderProvider: PinkViewHolderProvider) :
+    PinkBaseAdapter<PinkGroupNode<*>>(viewHolderProvider) {
 
-    private val _collapsedState = MutableLiveData<Boolean>().apply { value = true }
-    val collapsedState: LiveData<Boolean> = _collapsedState
+    protected val adapterDelegate = ConcatAdapter()
 
-    override var data: T = data
-        set(value) {
-            field = value
-            notifyItemChanged(0)
-        }
+    @Suppress("UNCHECKED_CAST")
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): PinkViewHolder<PinkGroupNode<*>> =
+        adapterDelegate.createViewHolder(parent, viewType) as PinkViewHolder<PinkGroupNode<*>>
 
-    override var collapsed: Boolean
-        get() = _collapsedState.value ?: true
-        set(value) = setCollapse(value)
-
-    override fun getItemViewType(position: Int) =
-        if (position == 0) viewHolderProvider.getItemType(typeId)
-        else itemAdapter.getItemViewType(position - 1)
-
-    override fun getItemId(position: Int) =
-        if (position == 0) GROUP_ITEM_ID else itemAdapter.getItemId(position - 1)
-
-    override fun getItem(position: Int) =
-        if (position == 0) this else itemAdapter.getItem(position - 1) as Any
-
-    override fun getItemCount() = if (collapsed) 1 else itemAdapter.itemCount + 1
-
-    protected fun setCollapse(value: Boolean) {
-        if (_collapsedState.value != value) {
-            _collapsedState.value = value
-            notifyCollapseChanged()
-        }
+    override fun onBindViewHolder(holder: PinkViewHolder<PinkGroupNode<*>>, position: Int) {
+        adapterDelegate.onBindViewHolder(holder, position)
     }
 
-    protected fun notifyCollapseChanged() {
-        notifyItemChanged(0)
-        if (collapsed)
-            notifyItemRangeRemoved(1, itemAdapter.itemCount)
-        else
-            notifyItemRangeInserted(1, itemAdapter.itemCount)
+    override fun getItemCount() = adapterDelegate.itemCount
+
+    override fun getItemViewType(position: Int) = adapterDelegate.getItemViewType(position)
+
+    override fun findRelativeAdapterPositionIn(
+        adapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>,
+        viewHolder: RecyclerView.ViewHolder,
+        localPosition: Int
+    ) = adapterDelegate.findRelativeAdapterPositionIn(adapter, viewHolder, localPosition)
+
+    override fun setHasStableIds(hasStableIds: Boolean) {
+        adapterDelegate.setHasStableIds(hasStableIds)
     }
 
-    companion object {
+    override fun onViewRecycled(holder: PinkViewHolder<PinkGroupNode<*>>) {
+        adapterDelegate.onViewRecycled(holder)
+    }
 
-        const val GROUP_ITEM_ID = -1L
+    override fun onFailedToRecycleView(holder: PinkViewHolder<PinkGroupNode<*>>) =
+        adapterDelegate.onFailedToRecycleView(holder)
 
+    override fun onViewAttachedToWindow(holder: PinkViewHolder<PinkGroupNode<*>>) {
+        adapterDelegate.onViewAttachedToWindow(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: PinkViewHolder<PinkGroupNode<*>>) {
+        adapterDelegate.onViewDetachedFromWindow(holder)
+    }
+
+    override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
+        adapterDelegate.registerAdapterDataObserver(observer)
+    }
+
+    override fun unregisterAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
+        adapterDelegate.unregisterAdapterDataObserver(observer)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        adapterDelegate.onAttachedToRecyclerView(recyclerView)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        adapterDelegate.onDetachedFromRecyclerView(recyclerView)
+    }
+
+    override fun setStateRestorationPolicy(strategy: StateRestorationPolicy) {
+        adapterDelegate.stateRestorationPolicy = strategy
+    }
+
+    override fun getItem(position: Int): PinkGroupNode<*> =
+        adapterDelegate.adapters[position] as PinkGroupNodeAdapter<*>
+
+    fun <T> addNode(
+        data: T,
+        typeId: Any,
+        subItemsAdapter: PinkBaseAdapter<*>,
+        subItems: List<*>? = null
+    ): PinkGroupAdapter =
+        apply {
+            adapterDelegate.addAdapter(
+                PinkGroupNodeAdapter(viewHolderProvider, subItemsAdapter, data, typeId)
+            )
+        }
+
+    fun <T> addNode(
+        position: Int,
+        data: T,
+        typeId: Any,
+        subItemsAdapter: PinkBaseAdapter<*>,
+        subItems: List<*>? = null
+    ): PinkGroupAdapter =
+        apply {
+            adapterDelegate.addAdapter(
+                position,
+                PinkGroupNodeAdapter(viewHolderProvider, subItemsAdapter, data, typeId)
+            )
+        }
+
+    fun remove(position: Int) {
+        adapterDelegate.removeAdapter(getItem(position) as PinkGroupNodeAdapter)
     }
 
 }

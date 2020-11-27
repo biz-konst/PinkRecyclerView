@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.example.pinkrecycleradapter.core.PinkViewHolderDelegate
 import com.example.pinkrecycleradapter.core.PinkViewHolder
-import com.example.pinkrecycleradapter.custom.PinkGroupAdapterItem
+import com.example.pinkrecycleradapter.custom.PinkGroupNode
 import com.example.pinkrecyclerview.databinding.Item1Binding
 import com.example.pinkrecyclerview.databinding.Item2Binding
 import com.example.pinkrecyclerview.databinding.Item3Binding
@@ -36,7 +36,7 @@ fun createItems() = listOf(
     ListItem("Item 3", "This is milk", null)
 )
 
-class ListItemViewHolder1 : PinkViewHolderDelegate<PinkGroupAdapterItem<ListItem>> {
+class ListItemViewHolder1 : PinkViewHolderDelegate<PinkGroupNode<ListItem>> {
 
     override fun inflate(
         parent: ViewGroup,
@@ -45,19 +45,19 @@ class ListItemViewHolder1 : PinkViewHolderDelegate<PinkGroupAdapterItem<ListItem
     ): Item1Binding = DataBindingUtil.inflate(inflater, layoutId, parent, false)
 
     override fun bind(
-        holder: PinkViewHolder<PinkGroupAdapterItem<ListItem>>,
-        item: PinkGroupAdapterItem<ListItem>,
+        holder: PinkViewHolder<PinkGroupNode<ListItem>>,
+        node: PinkGroupNode<ListItem>,
         position: Int
     ) {
         (holder.binding as Item1Binding).apply {
-            this.item = item.data
-            this.adapter = item
+            this.item = node.data
+            this.adapter = node
         }
     }
 
 }
 
-class ListItemViewHolder2 : PinkViewHolderDelegate<PinkGroupAdapterItem<ListItem>> {
+class ListItemViewHolder2 : PinkViewHolderDelegate<PinkGroupNode<ListItem>> {
 
     override fun inflate(
         parent: ViewGroup,
@@ -66,19 +66,19 @@ class ListItemViewHolder2 : PinkViewHolderDelegate<PinkGroupAdapterItem<ListItem
     ): Item2Binding = DataBindingUtil.inflate(inflater, layoutId, parent, false)
 
     override fun bind(
-        holder: PinkViewHolder<PinkGroupAdapterItem<ListItem>>,
-        item: PinkGroupAdapterItem<ListItem>,
+        holder: PinkViewHolder<PinkGroupNode<ListItem>>,
+        node: PinkGroupNode<ListItem>,
         position: Int
     ) {
         (holder.binding as Item2Binding).apply {
-            this.item = item.data
-            this.adapter = item
+            this.item = node.data
+            this.adapter = node
         }
     }
 
 }
 
-class ListItemViewHolder3 : PinkViewHolderDelegate<PinkGroupAdapterItem<ListItem>> {
+class ListItemViewHolder3 : PinkViewHolderDelegate<PinkGroupNode<ListItem>> {
 
     override fun inflate(
         parent: ViewGroup,
@@ -87,13 +87,13 @@ class ListItemViewHolder3 : PinkViewHolderDelegate<PinkGroupAdapterItem<ListItem
     ): Item3Binding = DataBindingUtil.inflate(inflater, layoutId, parent, false)
 
     override fun bind(
-        holder: PinkViewHolder<PinkGroupAdapterItem<ListItem>>,
-        item: PinkGroupAdapterItem<ListItem>,
+        holder: PinkViewHolder<PinkGroupNode<ListItem>>,
+        node: PinkGroupNode<ListItem>,
         position: Int
     ) {
         (holder.binding as Item3Binding).apply {
-            this.item = item.data
-            this.adapter = item
+            this.item = node.data
+            this.adapter = node
         }
     }
 

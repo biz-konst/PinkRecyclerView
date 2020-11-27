@@ -11,7 +11,7 @@
 
         <variable
             name="adapter"
-            type="com.example.pinkrecycleradapter.custom.PinkGroupAdapterItem" />
+            type="com.example.pinkrecycleradapter.custom.PinkGroupNode" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
