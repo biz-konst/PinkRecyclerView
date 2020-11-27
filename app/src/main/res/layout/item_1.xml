@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.example.pinkrecyclerview.ListItem" />
+
+        <variable
+            name="adapter"
+            type="com.example.pinkrecycleradapter.custom.PinkGroupAdapterItem" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_small">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> adapter.setCollapsed(!adapter.collapsed)}"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_small">
+
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_small"
+                android:text="@{item.title}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:text="Text" />
+
+            <TextView
+                android:id="@+id/subtitle_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{item.subTitle}"
+                tools:text="Text" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
