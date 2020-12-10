@@ -22,6 +22,12 @@ fun createItems() = listOf(
             ChildLitItem(1, "Big umbrella"),
             ChildLitItem(2, "Medium umbrella"),
             ChildLitItem(3, "Small umbrella"),
+            ChildLitItem(4, "Big umbrella"),
+            ChildLitItem(5, "Medium umbrella"),
+            ChildLitItem(6, "Small umbrella"),
+            ChildLitItem(7, "Big umbrella"),
+            ChildLitItem(8, "Medium umbrella"),
+            ChildLitItem(9, "Small umbrella")
         )
     ),
     ListItem(
@@ -30,7 +36,11 @@ fun createItems() = listOf(
             ChildLitItem(1, "It is water"),
             ChildLitItem(2, "It is apple juice"),
             ChildLitItem(3, "It is orange juice"),
-            ChildLitItem(4, "It is jin")
+            ChildLitItem(4, "It is jin"),
+            ChildLitItem(5, "It is water"),
+            ChildLitItem(6, "It is apple juice"),
+            ChildLitItem(7, "It is orange juice"),
+            ChildLitItem(8, "It is jin")
         )
     ),
     ListItem("Item 3", "This is milk", null)
@@ -46,12 +56,12 @@ class ListItemViewHolder1 : PinkViewHolderDelegate<PinkGroupNode<ListItem>> {
 
     override fun bind(
         holder: PinkViewHolder<PinkGroupNode<ListItem>>,
-        node: PinkGroupNode<ListItem>,
+        item: PinkGroupNode<ListItem>,
         position: Int
     ) {
         (holder.binding as Item1Binding).apply {
-            this.item = node.data
-            this.adapter = node
+            this.item = item.data
+            this.adapter = item
         }
     }
 
@@ -67,12 +77,12 @@ class ListItemViewHolder2 : PinkViewHolderDelegate<PinkGroupNode<ListItem>> {
 
     override fun bind(
         holder: PinkViewHolder<PinkGroupNode<ListItem>>,
-        node: PinkGroupNode<ListItem>,
+        item: PinkGroupNode<ListItem>,
         position: Int
     ) {
         (holder.binding as Item2Binding).apply {
-            this.item = node.data
-            this.adapter = node
+            this.item = item.data
+            this.adapter = item
         }
     }
 
@@ -88,12 +98,12 @@ class ListItemViewHolder3 : PinkViewHolderDelegate<PinkGroupNode<ListItem>> {
 
     override fun bind(
         holder: PinkViewHolder<PinkGroupNode<ListItem>>,
-        node: PinkGroupNode<ListItem>,
+        item: PinkGroupNode<ListItem>,
         position: Int
     ) {
         (holder.binding as Item3Binding).apply {
-            this.item = node.data
-            this.adapter = node
+            this.item = item.data
+            this.adapter = item
         }
     }
 

@@ -8,10 +8,10 @@ import com.example.pinkrecycleradapter.core.PinkViewHolder
 import com.example.pinkrecycleradapter.core.PinkViewHolderProvider
 
 @Suppress("unused")
-open class PinkGroupAdapter(viewHolderProvider: PinkViewHolderProvider) :
+open class PinkGroupAdapter(viewHolderProvider: PinkViewHolderProvider, config: ConcatAdapter.Config? = null) :
     PinkBaseAdapter<PinkGroupNode<*>>(viewHolderProvider) {
 
-    protected val adapterDelegate = ConcatAdapter()
+    protected val adapterDelegate = config?.let { ConcatAdapter(it) } ?: ConcatAdapter()
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreateViewHolder(
@@ -79,8 +79,7 @@ open class PinkGroupAdapter(viewHolderProvider: PinkViewHolderProvider) :
     fun <T> addNode(
         data: T,
         typeId: Any,
-        subItemsAdapter: PinkBaseAdapter<*>,
-        subItems: List<*>? = null
+        subItemsAdapter: PinkBaseAdapter<*>
     ): PinkGroupAdapter =
         apply {
             adapterDelegate.addAdapter(
@@ -92,8 +91,7 @@ open class PinkGroupAdapter(viewHolderProvider: PinkViewHolderProvider) :
         position: Int,
         data: T,
         typeId: Any,
-        subItemsAdapter: PinkBaseAdapter<*>,
-        subItems: List<*>? = null
+        subItemsAdapter: PinkBaseAdapter<*>
     ): PinkGroupAdapter =
         apply {
             adapterDelegate.addAdapter(

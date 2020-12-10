@@ -1,10 +1,10 @@
 package com.example.pinkrecyclerview
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import android.view.MotionEvent
+import androidx.recyclerview.widget.*
 import com.example.pinkrecycleradapter.core.BasePinkViewHolderProvider
 import com.example.pinkrecycleradapter.custom.PinkGroupAdapter
 import com.example.pinkrecycleradapter.custom.PinkGroupNodeAdapter
@@ -12,6 +12,8 @@ import com.example.pinkrecycleradapter.custom.PinkListAdapter
 
 class MainActivity : AppCompatActivity() {
 
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,6 +38,20 @@ class MainActivity : AppCompatActivity() {
             .addNode(items[2], items[2].title,
                 PinkListAdapter(viewHolderRepo, diffItemCallback)
                     .apply { submitList(items[1].child) })
+//        list.itemAnimator?.apply {
+//            addDuration = 0
+//            removeDuration = 0
+//        }
+
+        list.addOnItemTouchListener(object : RecyclerView.SimpleOnItemTouchListener() {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                if (e.action == MotionEvent.ACTION_DOWN) {
+                    rv.itemAnimator?.endAnimations()
+                }
+                return false
+            }
+        })
+
     }
 
     companion object {
