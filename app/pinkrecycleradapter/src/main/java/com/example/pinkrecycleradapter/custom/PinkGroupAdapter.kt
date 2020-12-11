@@ -1,5 +1,6 @@
 package com.example.pinkrecycleradapter.custom
 
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -8,10 +9,21 @@ import com.example.pinkrecycleradapter.core.PinkViewHolder
 import com.example.pinkrecycleradapter.core.PinkViewHolderProvider
 
 @Suppress("unused")
-open class PinkGroupAdapter(viewHolderProvider: PinkViewHolderProvider, config: ConcatAdapter.Config? = null) :
+open class PinkGroupAdapter(
+    viewHolderProvider: PinkViewHolderProvider,
+    config: ConcatAdapter.Config? = null
+) :
     PinkBaseAdapter<PinkGroupNode<*>>(viewHolderProvider) {
 
     protected val adapterDelegate = config?.let { ConcatAdapter(it) } ?: ConcatAdapter()
+
+    private val onItemTouchListener = object : RecyclerView.SimpleOnItemTouchListener() {
+        override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+            if (e.action == MotionEvent.ACTION_DOWN || e.action == MotionEvent.ACTION_CANCEL)
+                rv.itemAnimator?.endAnimations()
+            return super.onInterceptTouchEvent(rv, e)
+        }
+    }
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreateViewHolder(
@@ -62,10 +74,12 @@ open class PinkGroupAdapter(viewHolderProvider: PinkViewHolderProvider, config: 
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.addOnItemTouchListener(onItemTouchListener)
         adapterDelegate.onAttachedToRecyclerView(recyclerView)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.removeOnItemTouchListener(onItemTouchListener)
         adapterDelegate.onDetachedFromRecyclerView(recyclerView)
     }
 

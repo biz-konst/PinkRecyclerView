@@ -43,15 +43,6 @@ class MainActivity : AppCompatActivity() {
 //            removeDuration = 0
 //        }
 
-        list.addOnItemTouchListener(object : RecyclerView.SimpleOnItemTouchListener() {
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                if (e.action == MotionEvent.ACTION_DOWN) {
-                    rv.itemAnimator?.endAnimations()
-                }
-                return false
-            }
-        })
-
     }
 
     companion object {

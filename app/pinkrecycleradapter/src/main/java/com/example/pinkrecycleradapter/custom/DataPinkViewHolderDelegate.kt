@@ -24,7 +24,7 @@ open class DataPinkViewHolderDelegate<T>(
             .apply { lifecycleOwner = this@DataPinkViewHolderDelegate.lifecycleOwner }
 
     override fun bind(holder: PinkViewHolder<T>, item: T, position: Int) {
-        binder.invoke(holder, item, position)
+        binder(holder, item, position)
     }
 
 }

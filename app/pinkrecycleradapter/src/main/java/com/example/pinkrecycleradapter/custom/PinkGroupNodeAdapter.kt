@@ -1,5 +1,8 @@
 package com.example.pinkrecycleradapter.custom
 
+import androidx.databinding.Observable
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.pinkrecycleradapter.core.PinkBaseAdapter
@@ -7,16 +10,17 @@ import com.example.pinkrecycleradapter.core.PinkViewHolderProvider
 import java.util.*
 import kotlin.properties.Delegates
 
-@Suppress("unused")
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 open class PinkGroupNodeAdapter<T>(
     provider: PinkViewHolderProvider,
     override val subItemsAdapter: PinkBaseAdapter<*>,
     data: T,
-    private val typeId: Any
+    typeId: Any? = null
 ) : PinkBaseAdapter<Any>(provider), PinkGroupNode<T> {
 
-    private val _collapsedState = MutableLiveData<Boolean>().apply { value = true }
-    val collapsedState: LiveData<Boolean> = _collapsedState
+    val collapsedState = ObservableBoolean(true)
+
+    private val typeId = typeId ?: data!!::class
 
     override var data: T = data
         set(value) {
@@ -25,7 +29,7 @@ open class PinkGroupNodeAdapter<T>(
         }
 
     override var collapsed: Boolean
-        get() = _collapsedState.value ?: true
+        get() = collapsedState.get()
         set(value) = setCollapse(value)
 
     override fun getItemViewType(position: Int) =
@@ -41,10 +45,10 @@ open class PinkGroupNodeAdapter<T>(
     override fun getItemCount() = if (collapsed) 1 else subItemsAdapter.itemCount + 1
 
     protected fun setCollapse(value: Boolean) {
-        if (_collapsedState.value != value) {
-            _collapsedState.value = value
-            notifyCollapseChanged()
-        }
+        if (collapsedState.get() == value) return
+
+        collapsedState.set(value)
+        notifyCollapseChanged()
     }
 
     protected fun notifyCollapseChanged() {
